@@ -4,7 +4,7 @@ export default class PageInfo extends Component {
   render() {
     const { count, next, previous } = this.props.pageinfo;
     return (
-      <div>
+      <div className="pageinfo">
         <p>Results: {count}</p>
         {previous ? (
           <button className="btn btn-info" onClick={this.props.clickPrev}>

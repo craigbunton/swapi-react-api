@@ -1,21 +1,25 @@
 import React, { Component } from "react";
-import CharInfo from "./CharInfo";
+// import CharInfo from "./CharInfo";
 
 export default class ListPeople extends Component {
   render() {
     const people = this.props.people;
+    const getPersonDetail = this.props.getPersonDetail;
 
     return (
-      <div className="ListPeople">
-        {people.map(p => {
-          return (
-            <div key={p.url}>
-              <p className="char-name">{p.name}</p>
-              <CharInfo charInfo={p} />
-            </div>
-          );
-        })}
-      </div>
+      <ul key="p.url" className="listpeople">
+        {people.map(p => (
+          <li>
+            <button
+              className="listbtn"
+              href="/"
+              onClick={() => getPersonDetail(p)}
+            >
+              {p.name}
+            </button>
+          </li>
+        ))}
+      </ul>
     );
   }
 }

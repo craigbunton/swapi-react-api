@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import axios from "axios";
 import ListPeople from "./components/ListPeople";
 import PageInfo from "./components/PageInfo";
+import ItemDetail from "./components/ItemDetail";
 import "./App.css";
 
 export default class App extends Component {
@@ -14,28 +15,41 @@ export default class App extends Component {
         previous: null,
         current: "https://swapi.co/api/people/?page=1"
       },
-      people: []
+      people: [],
+      currentdetail: {
+        name: "select a character..."
+      }
     };
     this.getPeople = this.getPeople.bind(this);
     this.clickNext = this.clickNext.bind(this);
     this.clickPrev = this.clickPrev.bind(this);
+    this.getPersonDetail = this.getPersonDetail.bind(this);
   }
 
   getPeople() {
     const current = this.state.pageinfo.current;
+    const currentdetail = this.state.currentdetail;
     return axios.get(this.state.pageinfo.current).then(response => {
       const { count, next, previous, results } = response.data;
-      this.setState({
-        pageinfo: {
-          count: count,
-          next: next,
-          previous: previous,
-          current: current
-        },
-        people: results
-      });
+      const prevState = this.state;
+      prevState.pageinfo.count = count;
+      prevState.pageinfo.next = next;
+      prevState.pageinfo.previous = previous;
+      prevState.pageinfo.current = current;
+      prevState.people = results;
+      prevState.currentdetail = currentdetail;
+      this.setState(prevState);
+      console.log("After getPeople setState: ", this.state);
     });
   }
+
+  getPersonDetail = p => {
+    console.log("p: ", p);
+    console.log("this.state: ", this.state);
+    const prevState = this.state;
+    prevState.currentdetail = p;
+    this.setState(prevState);
+  };
 
   clickNext() {
     const nextpage = this.state.pageinfo.next;
@@ -55,20 +69,19 @@ export default class App extends Component {
       this.setState(prevState);
       this.getPeople();
     }
-    // console.log("THIS STATE AFTER CLICKNEXT: ", this.state);
   }
 
   componentDidMount() {
     this.getPeople();
   }
 
-  // componentDidUpdate() {
-  //   this.getPeople();
-  // }
-
   render() {
     const { people } = this.state;
     const { pageinfo } = this.state;
+    const { currentdetail } = this.state;
+
+    console.log("App list jsx: ", this.state);
+
     return (
       <div className="App">
         <div className="container">
@@ -77,10 +90,15 @@ export default class App extends Component {
             <PageInfo
               clickNext={this.clickNext}
               clickPrev={this.clickPrev}
-              getPeople={this.getPeople}
               pageinfo={pageinfo}
             />
-            <ListPeople people={people} />
+          </div>
+          <div className="datapanel">
+            <ListPeople
+              people={people}
+              getPersonDetail={this.getPersonDetail}
+            />
+            <ItemDetail p={currentdetail} className="itemdetail" />
           </div>
         </div>
       </div>
