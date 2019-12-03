@@ -20,38 +20,36 @@ export default class App extends Component {
         name: "select a character..."
       }
     };
-    this.getPeople = this.getPeople.bind(this);
-    this.clickNext = this.clickNext.bind(this);
-    this.clickPrev = this.clickPrev.bind(this);
-    this.getPersonDetail = this.getPersonDetail.bind(this);
   }
 
-  getPeople() {
+  getPeople = async () => {
     const current = this.state.pageinfo.current;
     const currentdetail = this.state.currentdetail;
-    return axios.get(this.state.pageinfo.current).then(response => {
-      const { count, next, previous, results } = response.data;
-      const prevState = this.state;
-      prevState.pageinfo.count = count;
-      prevState.pageinfo.next = next;
-      prevState.pageinfo.previous = previous;
-      prevState.pageinfo.current = current;
-      prevState.people = results;
-      prevState.currentdetail = currentdetail;
-      this.setState(prevState);
-      console.log("After getPeople setState: ", this.state);
-    });
-  }
-
-  getPersonDetail = p => {
-    console.log("p: ", p);
-    console.log("this.state: ", this.state);
+    const response = await axios.get(this.state.pageinfo.current);
+    const { count, next, previous, results } = response.data;
     const prevState = this.state;
-    prevState.currentdetail = p;
+    prevState.pageinfo.count = count;
+    prevState.pageinfo.next = next;
+    prevState.pageinfo.previous = previous;
+    prevState.pageinfo.current = current;
+    prevState.people = results;
+    prevState.currentdetail = currentdetail;
     this.setState(prevState);
   };
 
-  clickNext() {
+  getPersonDetail = async p => {
+    const prevState = this.state;
+    prevState.currentdetail = p;
+    console.log("slice: ", p.homeworld.slice(0, 4));
+    if (p.homeworld.slice(0, 5) === "https") {
+      const response = await axios.get(p.homeworld);
+      const { name } = response.data;
+      prevState.currentdetail.homeworld = name;
+    }
+    this.setState(prevState);
+  };
+
+  clickNext = () => {
     const nextpage = this.state.pageinfo.next;
     if (nextpage) {
       const prevState = this.state;
@@ -59,9 +57,9 @@ export default class App extends Component {
       this.setState(prevState);
       this.getPeople();
     }
-  }
+  };
 
-  clickPrev() {
+  clickPrev = () => {
     const prevpage = this.state.pageinfo.previous;
     if (prevpage) {
       const prevState = this.state;
@@ -69,7 +67,7 @@ export default class App extends Component {
       this.setState(prevState);
       this.getPeople();
     }
-  }
+  };
 
   componentDidMount() {
     this.getPeople();
@@ -79,8 +77,6 @@ export default class App extends Component {
     const { people } = this.state;
     const { pageinfo } = this.state;
     const { currentdetail } = this.state;
-
-    console.log("App list jsx: ", this.state);
 
     return (
       <div className="App">

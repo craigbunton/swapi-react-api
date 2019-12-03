@@ -1,5 +1,4 @@
 import React, { Component } from "react";
-// import CharInfo from "./CharInfo";
 
 export default class ListPeople extends Component {
   render() {
