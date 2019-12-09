@@ -3,6 +3,7 @@ import React, { Component } from "react";
 export class ItemDetail extends Component {
   render() {
     const p = this.props.p;
+    console.log("currentdetail: ", p);
 
     return (
       <div className="itemdetail">
@@ -16,9 +17,9 @@ export class ItemDetail extends Component {
         <p>Skin Colour: {p.skin_color}</p>
         <p>Weight: {p.mass}kg</p>
         <p>Height: {p.height}</p>
-        <p>films: {p.films}</p>
-        <p>starships: {p.starships}</p>
-        <p>vehicles: {p.vehicles}</p>
+        {/* <p>Films: {p.films}</p> */}"{" "}
+        {/* <p>starships: {p.starships}</p>
+        <p>vehicles: {p.vehicles}</p>" */}
       </div>
     );
   }

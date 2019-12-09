@@ -6,9 +6,9 @@ export default class ListPeople extends Component {
     const getPersonDetail = this.props.getPersonDetail;
 
     return (
-      <ul key="p.url" className="listpeople">
+      <ul className="listpeople">
         {people.map(p => (
-          <li>
+          <li key={p.url}>
             <button
               className="listbtn"
               href="/"

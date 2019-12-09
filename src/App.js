@@ -3,6 +3,7 @@ import axios from "axios";
 import ListPeople from "./components/ListPeople";
 import PageInfo from "./components/PageInfo";
 import ItemDetail from "./components/ItemDetail";
+import Films from "./components/Films";
 import "./App.css";
 
 export default class App extends Component {
@@ -40,12 +41,33 @@ export default class App extends Component {
   getPersonDetail = async p => {
     const prevState = this.state;
     prevState.currentdetail = p;
-    console.log("slice: ", p.homeworld.slice(0, 4));
+    //
+    if (p.films[0].slice(0, 5) === "https") {
+      let promises = [];
+      p.films.map(async film => {
+        axios.get(film).then(res => {
+          promises.push(<li key={res.data.title}>{res.data.title}</li>);
+        });
+      });
+
+      prevState.currentdetail.filmlist = promises;
+    }
+    //
+
     if (p.homeworld.slice(0, 5) === "https") {
       const response = await axios.get(p.homeworld);
       const { name } = response.data;
       prevState.currentdetail.homeworld = name;
     }
+    //
+    //
+    if (p.species[0].slice(0, 5) === "https") {
+      const response = await axios.get(p.species[0]);
+      const { name } = response.data;
+      prevState.currentdetail.species = name;
+    }
+    //
+
     this.setState(prevState);
   };
 
@@ -77,6 +99,7 @@ export default class App extends Component {
     const { people } = this.state;
     const { pageinfo } = this.state;
     const { currentdetail } = this.state;
+    const { filmlist } = this.state.currentdetail;
 
     return (
       <div className="App">
@@ -94,7 +117,8 @@ export default class App extends Component {
               people={people}
               getPersonDetail={this.getPersonDetail}
             />
-            <ItemDetail p={currentdetail} className="itemdetail" />
+            <ItemDetail p={currentdetail} />
+            <Films f={filmlist} />
           </div>
         </div>
       </div>

@@ -15,7 +15,7 @@
 
 .datapanel {
   display: grid;
-  grid-template-columns: 25% 75%;
+  grid-template-columns: 2fr 3fr 2fr;
   grid-gap: 1%;
 }
 
@@ -26,12 +26,8 @@
   height: 100vh;
 }
 
-.listpeople > li {
-  align-content: space-around;
-}
-
 .listbtn {
-  width: 100%;
+  width: 80%;
 }
 .itemdetail {
   color: rgb(101010);
@@ -42,5 +38,10 @@
 .itemdetail > p {
   border: 0;
   margin: 0;
+  padding: 0;
+}
+.filmlist {
+  color: rgb(101010);
+  background-color: teal;
   padding: 0;
 }
